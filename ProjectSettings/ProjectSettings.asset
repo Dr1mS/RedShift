@@ -600,7 +600,7 @@ PlayerSettings:
     PS5: UNITY_MCP_READY
     QNX: UNITY_MCP_READY
     Server: UNITY_MCP_READY
-    Standalone: UNITY_MCP_READY
+    Standalone: UNITY_MCP_READY;FISHNET;FISHNET_V4
     VisionOS: UNITY_MCP_READY
     WebGL: UNITY_MCP_READY
     Windows Store Apps: UNITY_MCP_READY
