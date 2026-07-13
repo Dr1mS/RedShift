@@ -5,7 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Redshift.Core",
-        "Redshift.Meta"
+        "Redshift.Meta",
+        "Redshift.Gameplay"
     ],
     "includePlatforms": [
         "Editor"
