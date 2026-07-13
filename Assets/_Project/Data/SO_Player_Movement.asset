@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec50cb0a7ac8f743bfb955437e63089, type: 3}
+  m_Name: SO_Player_Movement
+  m_EditorClassIdentifier: Redshift.Gameplay::Redshift.Gameplay.PlayerMovementDef
+  WalkSpeed: 4.5
+  SprintSpeed: 7.5
+  CrouchSpeed: 2.2
+  GroundAcceleration: 40
+  AirAcceleration: 8
+  JumpHeight: 1.1
+  GroundCheckDistance: 0.25
+  UpAlignmentSharpness: 8
+  LookSensitivity: 0.12
+  PitchMin: -85
+  PitchMax: 85
+  StaminaMax: 6
+  StaminaDrainPerSecond: 1
+  StaminaRegenPerSecond: 0.7
+  StaminaRegenDelay: 1
+  SprintRecoveryThreshold: 0.25
+  StandingHeight: 1.8
+  CrouchHeight: 1.1
+  HeadHeight: 1.65
+  CrouchLerpSharpness: 12
