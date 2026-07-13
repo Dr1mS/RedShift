@@ -20,6 +20,8 @@ namespace Redshift.Gameplay
         public float JumpHeight = 1.1f;
         [Tooltip("Distance de détection du sol sous la capsule (m).")]
         public float GroundCheckDistance = 0.25f;
+        [Tooltip("Accélération de plaquage au sol (m/s²) — colle le joueur aux pentes/courbures.")]
+        public float GroundStickAcceleration = 5f;
 
         [Header("Alignement gravité")]
         [Tooltip("Vitesse du slerp d'alignement de l'up local (1/s). Jamais de snap (piège connu).")]

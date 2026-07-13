@@ -44,7 +44,8 @@ namespace Redshift.Gameplay
         private void FixedUpdate()
         {
             Refresh();
-            if (_applyToBody && body != null && !body.isKinematic && InGravity)
+            // IsSleeping : ne jamais réveiller un rigidbody endormi (loot endormi par défaut, piège connu).
+            if (_applyToBody && body != null && !body.isKinematic && !body.IsSleeping() && InGravity)
                 body.AddForce(CurrentAcceleration, ForceMode.Acceleration);
         }
 

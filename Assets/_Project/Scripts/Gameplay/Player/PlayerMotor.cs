@@ -39,6 +39,7 @@ namespace Redshift.Gameplay
         private bool sprintExhausted;
         private float stamina;
         private float lastSprintTime = float.NegativeInfinity;
+        private Vector3 groundNormal = Vector3.up;
 
         public bool IsGrounded { get; private set; }
         public bool IsCrouched { get; private set; }
@@ -143,7 +144,8 @@ namespace Redshift.Gameplay
             float radius = capsule.radius * 0.9f;
             Vector3 origin = body.position + up * (radius + 0.05f);
             float distance = 0.05f + _config.GroundCheckDistance;
-            IsGrounded = Physics.SphereCast(origin, radius, -up, out _, distance, _groundMask, QueryTriggerInteraction.Ignore);
+            IsGrounded = Physics.SphereCast(origin, radius, -up, out RaycastHit hit, distance, _groundMask, QueryTriggerInteraction.Ignore);
+            groundNormal = IsGrounded ? hit.normal : up;
         }
 
         private void Move(Vector3 up)
@@ -151,31 +153,48 @@ namespace Redshift.Gameplay
             float dt = Time.fixedDeltaTime;
             Vector2 move = moveAction.ReadValue<Vector2>();
 
-            Vector3 velocity = body.linearVelocity;
-            Vector3 verticalVelocity = Vector3.Project(velocity, up);
-            Vector3 planarVelocity = velocity - verticalVelocity;
-
             UpdateSprint(move, dt);
             float speed = IsCrouched ? _config.CrouchSpeed : IsSprinting ? _config.SprintSpeed : _config.WalkSpeed;
 
-            Vector3 wishDir = transform.forward * move.y + transform.right * move.x;
-            wishDir = Vector3.ProjectOnPlane(wishDir, up);
-            if (wishDir.sqrMagnitude > 1e-4f)
-                wishDir = wishDir.normalized * Mathf.Clamp01(move.magnitude);
+            Vector3 velocity = body.linearVelocity;
 
-            float acceleration = IsGrounded ? _config.GroundAcceleration : _config.AirAcceleration;
-            planarVelocity = Vector3.MoveTowards(planarVelocity, wishDir * speed, acceleration * dt);
-
-            verticalVelocity += gravity.CurrentAcceleration * dt;
-
-            if (jumpQueued && IsGrounded)
+            if (IsGrounded)
             {
-                float g = Mathf.Max(gravity.CurrentAcceleration.magnitude, 0.01f);
-                verticalVelocity = up * Mathf.Sqrt(2f * g * _config.JumpHeight);
-            }
-            jumpQueued = false;
+                // Au sol : contrôle de la vitesse complète le long de la pente (normale du sol),
+                // pas d'intégration de gravité — un plaquage léger suit la courbure de la planète.
+                Vector3 wishDir = transform.forward * move.y + transform.right * move.x;
+                wishDir = Vector3.ProjectOnPlane(wishDir, groundNormal);
+                if (wishDir.sqrMagnitude > 1e-4f)
+                    wishDir = wishDir.normalized * Mathf.Clamp01(move.magnitude);
 
-            body.linearVelocity = planarVelocity + verticalVelocity;
+                velocity = Vector3.MoveTowards(velocity, wishDir * speed, _config.GroundAcceleration * dt);
+                velocity -= up * (_config.GroundStickAcceleration * dt);
+
+                if (jumpQueued)
+                {
+                    float g = Mathf.Max(gravity.CurrentAcceleration.magnitude, 0.01f);
+                    velocity -= Vector3.Project(velocity, up);
+                    velocity += up * Mathf.Sqrt(2f * g * _config.JumpHeight);
+                }
+            }
+            else
+            {
+                // En l'air : contrôle réduit sur le plan tangent, gravité intégrée sur l'axe.
+                Vector3 verticalVelocity = Vector3.Project(velocity, up);
+                Vector3 planarVelocity = velocity - verticalVelocity;
+
+                Vector3 wishDir = transform.forward * move.y + transform.right * move.x;
+                wishDir = Vector3.ProjectOnPlane(wishDir, up);
+                if (wishDir.sqrMagnitude > 1e-4f)
+                    wishDir = wishDir.normalized * Mathf.Clamp01(move.magnitude);
+
+                planarVelocity = Vector3.MoveTowards(planarVelocity, wishDir * speed, _config.AirAcceleration * dt);
+                verticalVelocity += gravity.CurrentAcceleration * dt;
+                velocity = planarVelocity + verticalVelocity;
+            }
+
+            jumpQueued = false;
+            body.linearVelocity = velocity;
         }
 
         private void UpdateSprint(Vector2 move, float dt)
