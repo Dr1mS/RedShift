@@ -73,6 +73,10 @@ namespace Redshift.Gameplay
             var controller = GetComponent<ShuttleController>();
             if (controller != null)
                 controller.enabled = false;
+            // Le controller n'applique plus la gravité : l'épave retombe via le receiver.
+            var gravity = GetComponent<GravityReceiver>();
+            if (gravity != null)
+                gravity.ApplyToBody = true;
             foreach (Renderer r in _wreckRenderers)
                 if (r != null)
                     r.material.color = Color.Lerp(r.material.color, Color.black, 0.7f);

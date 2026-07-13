@@ -35,6 +35,8 @@ namespace Redshift.Gameplay
         public float MaxLandingTiltDegrees = 25f;
         [Tooltip("Distance sol (m) de déclenchement du snap.")]
         public float SnapDistance = 3f;
+        [Tooltip("Garde au sol au posé (m) — hauteur des patins sous l'origine.")]
+        public float LandingClearance = 0.2f;
 
         [Header("Coque")]
         public float MaxHull = 100f;

@@ -25,6 +25,9 @@ namespace Redshift.Gameplay
 
         private InputAction interactAction;
         private float localSeatTime;
+        // Suivi local : la passe client du SyncVar peut livrer un `prev` déjà null,
+        // on reconstitue donc la transition nous-mêmes.
+        private NetworkObject lastKnownOccupant;
 
         public bool IsOccupied => _occupant.Value != null;
         public bool IsPilotSeat => _isPilot;
@@ -122,9 +125,12 @@ namespace Redshift.Gameplay
             // Le host reçoit aussi la passe client ; on n'exécute la logique visuelle/état qu'une fois.
             if (asServer && IsClientInitialized)
                 return;
+            if (lastKnownOccupant == next)
+                return;
 
-            if (prev != null)
-                HandleUnseat(prev);
+            if (lastKnownOccupant != null)
+                HandleUnseat(lastKnownOccupant);
+            lastKnownOccupant = next;
             if (next != null)
                 HandleSeat(next);
         }

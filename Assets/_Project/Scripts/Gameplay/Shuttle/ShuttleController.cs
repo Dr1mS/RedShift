@@ -193,6 +193,8 @@ namespace Redshift.Gameplay
             body.linearVelocity = Vector3.zero;
             body.angularVelocity = Vector3.zero;
             body.MoveRotation(Quaternion.FromToRotation(transform.up, groundHit.normal) * body.rotation);
+            // Pose les patins au contact plutôt que de figer en l'air.
+            body.position -= gravityUp * Mathf.Max(0f, groundHit.distance - _def.LandingClearance);
             body.Sleep();
 
             if (IsServerInitialized) _landed.Value = true;
