@@ -38,6 +38,34 @@
                 { "name": "", "id": "a1b2c3d4-0003-4a5b-8c6d-300000000010", "path": "<Keyboard>/3", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Slot3", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "a1b2c3d4-0003-4a5b-8c6d-300000000011", "path": "<Keyboard>/4", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Slot4", "isComposite": false, "isPartOfComposite": false }
             ]
+        },
+        {
+            "name": "Flight",
+            "id": "a1b2c3d4-0004-4a5b-8c6d-400000000001",
+            "actions": [
+                { "name": "Throttle", "type": "Value", "id": "a1b2c3d4-0005-4a5b-8c6d-500000000001", "expectedControlType": "Axis", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "Strafe", "type": "Value", "id": "a1b2c3d4-0005-4a5b-8c6d-500000000002", "expectedControlType": "Axis", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "Vertical", "type": "Value", "id": "a1b2c3d4-0005-4a5b-8c6d-500000000003", "expectedControlType": "Axis", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "Look", "type": "Value", "id": "a1b2c3d4-0005-4a5b-8c6d-500000000004", "expectedControlType": "Vector2", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "Roll", "type": "Value", "id": "a1b2c3d4-0005-4a5b-8c6d-500000000005", "expectedControlType": "Axis", "processors": "", "interactions": "", "initialStateCheck": true },
+                { "name": "AssistToggle", "type": "Button", "id": "a1b2c3d4-0005-4a5b-8c6d-500000000006", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false }
+            ],
+            "bindings": [
+                { "name": "WS", "id": "a1b2c3d4-0006-4a5b-8c6d-600000000001", "path": "1DAxis", "interactions": "", "processors": "", "groups": "", "action": "Throttle", "isComposite": true, "isPartOfComposite": false },
+                { "name": "positive", "id": "a1b2c3d4-0006-4a5b-8c6d-600000000002", "path": "<Keyboard>/w", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Throttle", "isComposite": false, "isPartOfComposite": true },
+                { "name": "negative", "id": "a1b2c3d4-0006-4a5b-8c6d-600000000003", "path": "<Keyboard>/s", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Throttle", "isComposite": false, "isPartOfComposite": true },
+                { "name": "AD", "id": "a1b2c3d4-0006-4a5b-8c6d-600000000004", "path": "1DAxis", "interactions": "", "processors": "", "groups": "", "action": "Strafe", "isComposite": true, "isPartOfComposite": false },
+                { "name": "positive", "id": "a1b2c3d4-0006-4a5b-8c6d-600000000005", "path": "<Keyboard>/d", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Strafe", "isComposite": false, "isPartOfComposite": true },
+                { "name": "negative", "id": "a1b2c3d4-0006-4a5b-8c6d-600000000006", "path": "<Keyboard>/a", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Strafe", "isComposite": false, "isPartOfComposite": true },
+                { "name": "SpaceCtrl", "id": "a1b2c3d4-0006-4a5b-8c6d-600000000007", "path": "1DAxis", "interactions": "", "processors": "", "groups": "", "action": "Vertical", "isComposite": true, "isPartOfComposite": false },
+                { "name": "positive", "id": "a1b2c3d4-0006-4a5b-8c6d-600000000008", "path": "<Keyboard>/space", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Vertical", "isComposite": false, "isPartOfComposite": true },
+                { "name": "negative", "id": "a1b2c3d4-0006-4a5b-8c6d-600000000009", "path": "<Keyboard>/leftCtrl", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Vertical", "isComposite": false, "isPartOfComposite": true },
+                { "name": "", "id": "a1b2c3d4-0006-4a5b-8c6d-60000000000a", "path": "<Mouse>/delta", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Look", "isComposite": false, "isPartOfComposite": false },
+                { "name": "ZC", "id": "a1b2c3d4-0006-4a5b-8c6d-60000000000b", "path": "1DAxis", "interactions": "", "processors": "", "groups": "", "action": "Roll", "isComposite": true, "isPartOfComposite": false },
+                { "name": "positive", "id": "a1b2c3d4-0006-4a5b-8c6d-60000000000c", "path": "<Keyboard>/c", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Roll", "isComposite": false, "isPartOfComposite": true },
+                { "name": "negative", "id": "a1b2c3d4-0006-4a5b-8c6d-60000000000d", "path": "<Keyboard>/z", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Roll", "isComposite": false, "isPartOfComposite": true },
+                { "name": "", "id": "a1b2c3d4-0006-4a5b-8c6d-60000000000e", "path": "<Keyboard>/x", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "AssistToggle", "isComposite": false, "isPartOfComposite": false }
+            ]
         }
     ],
     "controlSchemes": [
