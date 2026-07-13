@@ -1,0 +1,17 @@
+{
+    "name": "Redshift.Meta",
+    "rootNamespace": "Redshift.Meta",
+    "references": [
+        "Redshift.Core",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

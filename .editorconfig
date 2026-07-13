@@ -1,0 +1,42 @@
+# REDSHIFT — conventions figées en P0 (CLAUDE.md).
+# Convention retenue : PascalCase public, camelCase privé sans préfixe,
+# EXCEPTION : _camelCase pour les champs privés sérialisés ([SerializeField]).
+# (.editorconfig ne sait pas distinguer un champ sérialisé — l'exception est
+# appliquée par revue, pas par analyseur.)
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{json,asmdef,yml,yaml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.cs]
+# Namespaces Redshift.* obligatoires (un asmdef par dossier Scripts)
+dotnet_style_require_accessibility_modifiers = always:warning
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+# public/internal membres => PascalCase
+dotnet_naming_rule.public_members_pascal.severity = warning
+dotnet_naming_rule.public_members_pascal.symbols = public_symbols
+dotnet_naming_rule.public_members_pascal.style = pascal_case
+dotnet_naming_symbols.public_symbols.applicable_kinds = property, method, field, event
+dotnet_naming_symbols.public_symbols.applicable_accessibilities = public, internal, protected
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+# champs privés => camelCase (le préfixe _ des champs sérialisés reste toléré :
+# severity suggestion, tranché en revue)
+dotnet_naming_rule.private_fields_camel.severity = suggestion
+dotnet_naming_rule.private_fields_camel.symbols = private_fields
+dotnet_naming_rule.private_fields_camel.style = camel_case
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.camel_case.capitalization = camel_case

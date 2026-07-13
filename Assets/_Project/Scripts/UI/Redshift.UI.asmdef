@@ -1,0 +1,17 @@
+{
+    "name": "Redshift.UI",
+    "rootNamespace": "Redshift.UI",
+    "references": [
+        "Redshift.Core",
+        "Redshift.Meta"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
