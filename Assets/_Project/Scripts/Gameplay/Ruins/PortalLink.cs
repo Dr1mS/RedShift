@@ -1,3 +1,4 @@
+using FishNet.Component.Transforming;
 using UnityEngine;
 
 namespace Redshift.Gameplay
@@ -53,6 +54,15 @@ namespace Redshift.Gameplay
                 body.linearVelocity = Vector3.zero;
                 body.angularVelocity = Vector3.zero;
             }
+
+            // Chez les pairs, le NetworkTransform (client-auth) interpolerait la traversée
+            // de ~2000 m (surface ↔ poche) → la capsule filerait à travers l'espace au lieu
+            // de sauter. On force un snap explicite : le prochain paquet porte le flag
+            // Teleport, les spectateurs appliquent la position instantanément (SPEC : joueur +
+            // objets tenus téléportés dans le même tick). No-op si non-owner (CanControl faux).
+            var nt = motor.GetComponent<NetworkTransform>();
+            if (nt != null)
+                nt.Teleport();
 
             var gravity = motor.GetComponent<GravityReceiver>();
             if (gravity != null)

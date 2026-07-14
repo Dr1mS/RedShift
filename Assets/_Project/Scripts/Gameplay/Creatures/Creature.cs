@@ -97,8 +97,15 @@ namespace Redshift.Gameplay
                 Vector3 pos = p.transform.position;
                 if (lastPositions.TryGetValue(p, out Vector3 last) && dt > 0f)
                 {
-                    float instantaneous = (pos - last).magnitude / dt;
-                    observedSpeeds[p] = Mathf.Lerp(observedSpeeds.TryGetValue(p, out float s) ? s : 0f, instantaneous, 0.3f);
+                    float delta = (pos - last).magnitude;
+                    // Un téléport (delta énorme sur une frame) ne doit pas compter comme du bruit.
+                    // On saute la mise à jour de la vitesse observée mais on garde lastPositions
+                    // à jour ci-dessous, sinon la frame suivante re-verrait le même saut.
+                    if (CreaturePerception.IsContinuousMotion(delta))
+                    {
+                        float instantaneous = delta / dt;
+                        observedSpeeds[p] = Mathf.Lerp(observedSpeeds.TryGetValue(p, out float s) ? s : 0f, instantaneous, 0.3f);
+                    }
                 }
                 lastPositions[p] = pos;
             }

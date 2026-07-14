@@ -53,5 +53,26 @@ namespace Redshift.Tests.EditMode
         [Test]
         public void Cone_SamePosition_IsNotSeen()
             => Assert.That(CreaturePerception.IsInCone(Vector3.zero, Vector3.forward, Vector3.zero, 45f, 20f), Is.False);
+
+        // Garde téléport (dette P3) : un saut de portail ne doit pas être « entendu » comme du bruit.
+        [Test]
+        public void ContinuousMotion_SmallFrameStep_IsContinuous()
+            => Assert.That(CreaturePerception.IsContinuousMotion(0.5f), Is.True, "un pas de frame normal compte comme bruit continu");
+
+        [Test]
+        public void ContinuousMotion_FastLegitMove_IsContinuous()
+            => Assert.That(CreaturePerception.IsContinuousMotion(2f), Is.True, "navette rapide (~2 m/frame) reste du mouvement continu");
+
+        [Test]
+        public void ContinuousMotion_PortalJump_IsIgnored()
+            => Assert.That(CreaturePerception.IsContinuousMotion(2000f), Is.False, "traversée de portail (~2000 m) : téléport, pas du bruit");
+
+        [Test]
+        public void ContinuousMotion_JustBelowGuard_IsContinuous()
+            => Assert.That(CreaturePerception.IsContinuousMotion(CreaturePerception.TeleportGuardDistance - 0.1f), Is.True);
+
+        [Test]
+        public void ContinuousMotion_AtGuard_IsIgnored()
+            => Assert.That(CreaturePerception.IsContinuousMotion(CreaturePerception.TeleportGuardDistance), Is.False, "seuil inclusif : au garde, on ignore");
     }
 }
