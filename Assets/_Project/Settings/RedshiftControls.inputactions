@@ -17,7 +17,8 @@
                 { "name": "Slot1", "type": "Button", "id": "a1b2c3d4-0002-4a5b-8c6d-20000000000a", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
                 { "name": "Slot2", "type": "Button", "id": "a1b2c3d4-0002-4a5b-8c6d-20000000000b", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
                 { "name": "Slot3", "type": "Button", "id": "a1b2c3d4-0002-4a5b-8c6d-20000000000c", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
-                { "name": "Slot4", "type": "Button", "id": "a1b2c3d4-0002-4a5b-8c6d-20000000000d", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false }
+                { "name": "Slot4", "type": "Button", "id": "a1b2c3d4-0002-4a5b-8c6d-20000000000d", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": false },
+                { "name": "Mine", "type": "Button", "id": "a1b2c3d4-0002-4a5b-8c6d-20000000000e", "expectedControlType": "Button", "processors": "", "interactions": "", "initialStateCheck": true }
             ],
             "bindings": [
                 { "name": "WASD", "id": "a1b2c3d4-0003-4a5b-8c6d-300000000001", "path": "2DVector", "interactions": "", "processors": "", "groups": "", "action": "Move", "isComposite": true, "isPartOfComposite": false },
@@ -36,7 +37,8 @@
                 { "name": "", "id": "a1b2c3d4-0003-4a5b-8c6d-30000000000e", "path": "<Keyboard>/1", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Slot1", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "a1b2c3d4-0003-4a5b-8c6d-30000000000f", "path": "<Keyboard>/2", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Slot2", "isComposite": false, "isPartOfComposite": false },
                 { "name": "", "id": "a1b2c3d4-0003-4a5b-8c6d-300000000010", "path": "<Keyboard>/3", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Slot3", "isComposite": false, "isPartOfComposite": false },
-                { "name": "", "id": "a1b2c3d4-0003-4a5b-8c6d-300000000011", "path": "<Keyboard>/4", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Slot4", "isComposite": false, "isPartOfComposite": false }
+                { "name": "", "id": "a1b2c3d4-0003-4a5b-8c6d-300000000011", "path": "<Keyboard>/4", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Slot4", "isComposite": false, "isPartOfComposite": false },
+                { "name": "", "id": "a1b2c3d4-0003-4a5b-8c6d-300000000012", "path": "<Mouse>/leftButton", "interactions": "", "processors": "", "groups": "KeyboardMouse", "action": "Mine", "isComposite": false, "isPartOfComposite": false }
             ]
         },
         {

@@ -38,6 +38,10 @@ namespace Redshift.Gameplay
         /// <summary>Slot plein + main vide → équipe ; main pleine + slot vide → range ; les deux → échange.</summary>
         public void RequestSlotSwap(int slot) => SlotSwapServerRpc(slot);
 
+        /// <summary>Serveur uniquement : vide la main sans relâcher l'item (dépôt en soute).</summary>
+        [Server]
+        public void ServerClearHand() => _handItem.Value = null;
+
         [ServerRpc]
         private void PickupServerRpc(WorldItem item)
         {
