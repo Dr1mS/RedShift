@@ -15,6 +15,9 @@ namespace Redshift.Gameplay
         private InputAction lookAction;
         private float pitch;
 
+        /// <summary>Pitch caméra local courant (degrés, déjà clampé). Lu par MiningLaser pour réplication réseau.</summary>
+        public float Pitch => pitch;
+
         private void OnEnable()
         {
             lookAction = _inputAsset.FindActionMap("Player", throwIfNotFound: true).FindAction("Look", throwIfNotFound: true);

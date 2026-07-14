@@ -1,5 +1,6 @@
 using FishNet.Object;
 using FishNet.Object.Synchronizing;
+using FishNet.Transporting;
 using Redshift.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,18 +20,32 @@ namespace Redshift.Gameplay
         private Transform _head;
         [SerializeField, Tooltip("Gèle le tir quand le joueur est assis/gelé.")]
         private PlayerMotor _motor;
+        [SerializeField, Tooltip("Source du pitch de tête (owner) — répliqué vers les pairs distants.")]
+        private PlayerLook _look;
         [SerializeField, Tooltip("Faisceau optionnel (2 points, monde).")]
         private LineRenderer _beam;
         [SerializeField] private LayerMask _mask = ~0;
         [SerializeField] private InputActionAsset _inputAsset;
+        [Header("Réplication du pitch tête (config technique)")]
+        [SerializeField, Tooltip("Cadence d'envoi du pitch owner→serveur (Hz).")]
+        private float _pitchSendRate = 12f;
+        [SerializeField, Tooltip("Seuil d'envoi (degrés) : pas de RPC sous cette variation.")]
+        private float _pitchSendThreshold = 0.5f;
+        [SerializeField, Tooltip("Netteté du slerp de lissage du pitch distant (1/s).")]
+        private float _pitchLerpSharpness = 18f;
 
         private readonly SyncVar<bool> _firing = new();
+        // Pitch de tête (degrés) : posé par le serveur via ServerRpc, lissé chez les pairs distants.
+        private readonly SyncVar<float> _headPitch = new();
 
         private InputAction mineAction;
         private LaserHeatModel heat;
         private OreVein pendingVein;
         private float pendingDamage;
         private float sendTimer;
+        private float pitchSendTimer;
+        private float lastSentPitch = float.NaN;
+        private float remotePitch;
 
         public float Heat01 => heat?.Heat01 ?? 0f;
         public bool Overheated => heat?.Overheated ?? false;
@@ -52,7 +67,24 @@ namespace Redshift.Gameplay
 
         private void Update()
         {
-            if (!IsOwner || mineAction == null)
+            if (IsOwner)
+            {
+                OwnerUpdate();
+                return;
+            }
+
+            // Pair distant (host inclus pour les autres joueurs) : PlayerLook est désactivé ici,
+            // on pilote donc nous-mêmes le pitch de la tête depuis la SyncVar, lissé.
+            ApplyRemotePitch();
+            if (_firing.Value)
+                UpdateBeamVisual(true); // faisceau distant suit la tête (désormais orientée).
+        }
+
+        private void OwnerUpdate()
+        {
+            SendPitch();
+
+            if (mineAction == null)
                 return;
 
             bool wantsFire = mineAction.IsPressed() && _motor != null && _motor.enabled;
@@ -68,6 +100,37 @@ namespace Redshift.Gameplay
 
             if (_firing.Value)
                 UpdateBeamVisual(true); // suit la visée du propriétaire chaque frame
+        }
+
+        /// <summary>Owner : diffuse le pitch de tête à cadence limitée (config technique), sur seuil.</summary>
+        private void SendPitch()
+        {
+            if (_look == null)
+                return;
+
+            pitchSendTimer += Time.deltaTime;
+            float interval = _pitchSendRate > 0f ? 1f / _pitchSendRate : 0f;
+            if (pitchSendTimer < interval)
+                return;
+
+            float pitch = _look.Pitch;
+            if (!float.IsNaN(lastSentPitch) && Mathf.Abs(pitch - lastSentPitch) < _pitchSendThreshold)
+                return;
+
+            pitchSendTimer = 0f;
+            lastSentPitch = pitch;
+            SetPitchServerRpc(pitch);
+        }
+
+        /// <summary>Pair distant : lisse le pitch reçu et l'écrit sur la tête (jamais chez l'owner).</summary>
+        private void ApplyRemotePitch()
+        {
+            if (_head == null)
+                return;
+
+            float t = 1f - Mathf.Exp(-_pitchLerpSharpness * Time.deltaTime);
+            remotePitch = Mathf.LerpAngle(remotePitch, _headPitch.Value, t);
+            _head.localRotation = Quaternion.Euler(remotePitch, 0f, 0f);
         }
 
         private void MineTick(float dt)
@@ -103,6 +166,10 @@ namespace Redshift.Gameplay
         [ServerRpc]
         private void SetFiringServerRpc(bool firing) => _firing.Value = firing;
 
+        // Canal unreliable : le pitch est fréquent et tolère la perte (interpolé à la réception).
+        [ServerRpc]
+        private void SetPitchServerRpc(float pitch, Channel channel = Channel.Unreliable) => _headPitch.Value = pitch;
+
         [ServerRpc]
         private void MineServerRpc(OreVein vein, float damage)
         {
@@ -122,7 +189,7 @@ namespace Redshift.Gameplay
             if (!firing)
                 return;
 
-            // Chez les pairs distants le pitch de tête n'est pas répliqué : faisceau indicatif.
+            // Le pitch de tête est répliqué (ApplyRemotePitch) : le faisceau distant suit la visée.
             Vector3 origin = _head.position;
             Vector3 end = origin + _head.forward * _def.Range;
             if (IsOwner && Physics.Raycast(origin, _head.forward, out RaycastHit hit, _def.Range, _mask, QueryTriggerInteraction.Ignore))

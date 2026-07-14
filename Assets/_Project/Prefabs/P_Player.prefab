@@ -316,11 +316,15 @@ MonoBehaviour:
   _def: {fileID: 11400000, guid: de922738447aaeb45af22c9ec3823f4f, type: 2}
   _head: {fileID: 5772076111547175172}
   _motor: {fileID: 5354212606918495245}
+  _look: {fileID: 2494589733068596347}
   _beam: {fileID: 8652013402716994946}
   _mask:
     serializedVersion: 2
     m_Bits: 4294967231
   _inputAsset: {fileID: -944628639613478452, guid: e8ba4b98a0864814d8625c8e4ea7b9c2, type: 3}
+  _pitchSendRate: 12
+  _pitchSendThreshold: 0.5
+  _pitchLerpSharpness: 18
 --- !u!114 &8086619726576204671
 MonoBehaviour:
   m_ObjectHideFlags: 0
