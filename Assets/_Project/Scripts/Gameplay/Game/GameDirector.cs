@@ -23,9 +23,12 @@ namespace Redshift.Gameplay
         private NetworkObject _shockwavePrefab;
         [SerializeField, Tooltip("Origine de l'onde : le visuel de l'étoile.")]
         private Transform _starOrigin;
+        [SerializeField, Tooltip("Cockpit de l'Arche-lite : évacuation des joueurs à bord au saut auto (T-0).")]
+        private JumpCockpit _cockpit;
 
         private readonly SyncVar<GamePhase> _phase = new(GamePhase.Ftl);
         private readonly SyncVar<uint> _phaseStartTick = new();
+        private readonly SyncVar<uint> _systemStartTick = new();
         private readonly SyncVar<int> _quotaDeposited = new();
         private readonly SyncVar<int> _quotaTarget = new();
 
@@ -80,6 +83,10 @@ namespace Redshift.Gameplay
         private float PhaseElapsed
             => (float)((TimeManager.Tick - _phaseStartTick.Value) * TimeManager.TickDelta);
 
+        /// <summary>Temps (s) écoulé depuis l'arrivée dans le système (écran récap).</summary>
+        public float ElapsedSystemTime
+            => _phase.Value == GamePhase.Ftl ? 0f : (float)((TimeManager.Tick - _systemStartTick.Value) * TimeManager.TickDelta);
+
         private void Awake()
         {
             Instance = this;
@@ -100,6 +107,7 @@ namespace Redshift.Gameplay
             ledger = new QuotaLedger(QuotaRules.QuotaFor(_def.QuotaBase, _def.QuotaGrowth, _systemIndex));
             _quotaTarget.Value = ledger.Target;
             timeline.StartSystem();
+            _systemStartTick.Value = TimeManager.Tick;
             SyncPhase();
         }
 
@@ -115,6 +123,10 @@ namespace Redshift.Gameplay
             if (timeline.SupernovaErupted && !supernovaAnnounced)
             {
                 supernovaAnnounced = true;
+                // À T-0 l'Arche saute quoi qu'il arrive : les joueurs à bord partent avec elle,
+                // les autres restent face à l'onde (SPEC §3.2).
+                if (_cockpit != null)
+                    _cockpit.EvacuateBoarded();
                 SpawnShockwave();
                 SupernovaEruptedRpc();
             }

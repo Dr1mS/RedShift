@@ -105,7 +105,7 @@ namespace Redshift.Gameplay
         protected IEnumerable<PlayerHealth> AlivePlayers()
         {
             foreach (PlayerHealth p in players)
-                if (p != null && !p.IsDead)
+                if (p != null && !p.IsDead && !p.IsEvacuated)
                     yield return p;
         }
 

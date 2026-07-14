@@ -23,13 +23,17 @@ namespace Redshift.Gameplay
 
         private readonly SyncVar<bool> _dead = new();
         private readonly SyncVar<float> _health = new();
+        private readonly SyncVar<bool> _evacuated = new();
 
         public bool IsDead => _dead.Value;
+        /// <summary>Parti avec l'Arche au saut : hors du monde, ignoré par l'onde et les monstres.</summary>
+        public bool IsEvacuated => _evacuated.Value;
         public float HealthNormalized => _def == null || _def.MaxHealth <= 0f ? 1f : _health.Value / _def.MaxHealth;
 
         private void Awake()
         {
             _dead.OnChange += OnDeadChanged;
+            _evacuated.OnChange += OnEvacuatedChanged;
         }
 
         public override void OnStartServer()
@@ -58,6 +62,23 @@ namespace Redshift.Gameplay
             if (_inventory != null)
                 _inventory.ServerDropHand();
             _dead.Value = true;
+        }
+
+        /// <summary>Serveur : le joueur saute avec l'Arche (SPEC §3.2) — gelé, intouchable, objets conservés.</summary>
+        [Server]
+        public void Evacuate()
+        {
+            if (_dead.Value || _evacuated.Value)
+                return;
+            _evacuated.Value = true;
+        }
+
+        private void OnEvacuatedChanged(bool prev, bool next, bool asServer)
+        {
+            if (asServer && IsClientInitialized)
+                return;
+            if (next)
+                _motor.SetSeated(true, false); // gel « à bord » : l'écran récap prend le relais
         }
 
         private void OnDeadChanged(bool prev, bool next, bool asServer)

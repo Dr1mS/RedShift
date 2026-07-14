@@ -45,7 +45,7 @@ namespace Redshift.Gameplay
 
             Vector3 center = transform.position;
             foreach (PlayerHealth player in players)
-                if (player != null && !player.IsDead && ShockwaveModel.Catches(center, radius, player.transform.position))
+                if (player != null && !player.IsDead && !player.IsEvacuated && ShockwaveModel.Catches(center, radius, player.transform.position))
                     player.Kill();
 
             foreach (ShuttleHull hull in shuttles)
