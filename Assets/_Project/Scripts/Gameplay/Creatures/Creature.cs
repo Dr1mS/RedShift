@@ -138,6 +138,40 @@ namespace Redshift.Gameplay
             return best;
         }
 
+        // Réutilisées chaque tick sans réallouer (host-only, monothread).
+        private readonly List<Vector3> _alivePositions = new();
+        private readonly List<PlayerHealth> _aliveList = new();
+        private readonly List<int> _candidateIndices = new();
+
+        /// <summary>
+        /// Cible « stalker » du Pâle (SPEC §4.8) : parmi les joueurs vivants EN LIGNE DE VUE et à
+        /// portée (<paramref name="sightRange"/>), préfère un joueur isolé (aucun autre vivant à
+        /// moins de <paramref name="isolationRadius"/>), sinon replie sur le plus proche.
+        /// L'isolement se calcule contre TOUS les vivants, y compris hors ligne de vue de la
+        /// créature (un coéquipier caché protège quand même son voisin). Renvoie null si aucun
+        /// candidat visible. Logique pure dans <see cref="CreaturePerception.SelectStalkTarget"/>.
+        /// </summary>
+        protected PlayerHealth SelectIsolatedTarget(float sightRange, float isolationRadius)
+        {
+            _alivePositions.Clear();
+            _aliveList.Clear();
+            _candidateIndices.Clear();
+
+            float sightSqr = sightRange * sightRange;
+            foreach (PlayerHealth p in AlivePlayers())
+            {
+                int index = _aliveList.Count;
+                _aliveList.Add(p);
+                _alivePositions.Add(p.transform.position);
+
+                if ((p.transform.position - transform.position).sqrMagnitude <= sightSqr && HasLineOfSight(p))
+                    _candidateIndices.Add(index);
+            }
+
+            int chosen = CreaturePerception.SelectStalkTarget(_alivePositions, _candidateIndices, transform.position, isolationRadius);
+            return chosen >= 0 ? _aliveList[chosen] : null;
+        }
+
         /// <summary>Ligne de vue : bloquée par la géométrie (couches Player et Creature ignorées).</summary>
         protected bool HasLineOfSight(PlayerHealth player)
         {
@@ -177,7 +211,12 @@ namespace Redshift.Gameplay
         protected void WanderAround(Vector3 center, float radius, float speed)
         {
             agent.speed = speed;
-            if (agent.pathPending || (agent.hasPath && agent.remainingDistance > 0.8f))
+            // On relance une errance quand l'agent est arrivé. Le seuil doit être ALIGNÉ sur
+            // stoppingDistance : l'agent freine à vel=0 dès remainingDistance < stoppingDistance
+            // (1.2 sur les prefabs). Un seuil de repath inférieur (l'ancien 0.8 codé en dur)
+            // laissait l'agent figé dans la bande morte [0.8, 1.2] — arrivé pour l'agent, encore
+            // en trajet pour nous → plus jamais de repath, créature immobile (P4-8).
+            if (agent.pathPending || (agent.hasPath && agent.remainingDistance > agent.stoppingDistance + 0.1f))
                 return;
             Vector3 candidate = center + Random.insideUnitSphere * radius;
             if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, 4f, NavMesh.AllAreas))

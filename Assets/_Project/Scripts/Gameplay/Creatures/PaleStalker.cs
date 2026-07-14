@@ -6,14 +6,14 @@ namespace Redshift.Gameplay
     /// <summary>
     /// Le Pâle (SPEC §4.8) : stalker des ruines. Approche quand on ne le regarde pas,
     /// se fige sous le regard (se retourner = contre-jeu, LC-Bracken-like), fuit la
-    /// lumière directe de la lampe, attaque de dos. Cible le joueur le plus proche
-    /// en ligne de vue (isolement réel à plusieurs : P4).
+    /// lumière directe de la lampe, attaque de dos. Traque en priorité les joueurs
+    /// ISOLÉS (P4-8) ; repli sur le plus proche en ligne de vue si personne n'est isolé.
     /// </summary>
     public class PaleStalker : Creature
     {
         protected override void ServerTick(float dt)
         {
-            PlayerHealth target = NearestAlive(_def.SightRange, requireLineOfSight: true);
+            PlayerHealth target = SelectIsolatedTarget(_def.SightRange, _def.IsolationRadius);
             if (target == null)
             {
                 WanderAround(Home, _def.PatrolRadius, _def.PatrolSpeed);

@@ -28,6 +28,7 @@ MonoBehaviour:
   NoiseHearingRange: 35
   MemorySeconds: 6
   SightRange: 18
+  IsolationRadius: 20
   WatchConeDegrees: 55
   LampConeDegrees: 35
   LampFleeRange: 14

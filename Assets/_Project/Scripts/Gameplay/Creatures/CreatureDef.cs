@@ -38,6 +38,8 @@ namespace Redshift.Gameplay
 
         [Header("Vue (Pâle — stalker, SPEC : fuit la lumière, attaque de dos)")]
         public float SightRange = 18f;
+        [Tooltip("Rayon d'isolement (m) : un joueur est « isolé » si aucun autre joueur vivant n'est à moins de cette distance. Le Pâle traque en priorité les isolés (SPEC §4.8).")]
+        public float IsolationRadius = 20f;
         [Tooltip("Demi-angle (deg) du cône de regard joueur qui fige la créature.")]
         public float WatchConeDegrees = 55f;
         [Tooltip("Demi-angle (deg) du cône de lampe qui la fait fuir.")]
