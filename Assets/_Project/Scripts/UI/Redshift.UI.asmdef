@@ -5,6 +5,7 @@
         "Redshift.Core",
         "Redshift.Meta",
         "Redshift.Gameplay",
+        "Redshift.Networking",
         "FishNet.Runtime"
     ],
     "includePlatforms": [],
