@@ -44,6 +44,17 @@ namespace Redshift.Gameplay
         protected virtual void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
+            // Le NavMeshAgent natif tente de s'attacher au NavMesh dès la
+            // désérialisation de la scène (avant même le premier Awake
+            // scripté), donc avant que PocketNavMesh n'ait pu enregistrer la
+            // NavMeshData de la poche (« Failed to create agent because
+            // there is no valid NavMesh », reproductible en build standalone
+            // — l'instance de scène porte désormais un override enabled=false
+            // pour empêcher cette attache précoce). On réactive explicitement
+            // en OnStartServer, qui s'exécute après tout le chargement de
+            // scène et l'enregistrement du NavMesh de la poche ; défense en
+            // profondeur ici au cas où l'override serait un jour perdu.
+            agent.enabled = false;
             block = new MaterialPropertyBlock();
             if (_stateRenderer != null)
                 baseColor = _stateRenderer.sharedMaterial.color;
@@ -54,14 +65,8 @@ namespace Redshift.Gameplay
         {
             base.OnStartServer();
             home = transform.position;
-        }
-
-        public override void OnStartClient()
-        {
-            base.OnStartClient();
-            // La simulation vit chez le host uniquement.
-            if (!IsServerInitialized)
-                agent.enabled = false;
+            // La simulation vit chez le host uniquement : seul le serveur active l'agent.
+            agent.enabled = true;
         }
 
         private void Update()

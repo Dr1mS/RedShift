@@ -8182,6 +8182,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fouisseur_1
       objectReference: {fileID: 0}
+    - target: {fileID: 6487376702313226468, guid: 700028d8e3a1e1e48a99ca0b7ca43eeb, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9169261881300915034, guid: 700028d8e3a1e1e48a99ca0b7ca43eeb, type: 3}
       propertyPath: SceneId
       value: 3758075903
@@ -9015,6 +9019,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 367052739660454607, guid: 5216e52611b04144ab329d76588947af, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2728040278529877046, guid: 5216e52611b04144ab329d76588947af, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4411341870270887750, guid: 5216e52611b04144ab329d76588947af, type: 3}
