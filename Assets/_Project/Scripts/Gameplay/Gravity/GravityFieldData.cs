@@ -14,8 +14,14 @@ namespace Redshift.Gameplay
         public readonly float InfluenceRadius;
         public readonly float SurfaceGravity;
         public readonly int Priority;
+        /// <summary>Champ uniforme (poches d'intérieur, D6) : direction constante au lieu du centre.</summary>
+        public readonly bool IsUniform;
+        public readonly Vector3 UniformDirection;
 
         public GravityFieldData(int id, Vector3 center, float surfaceRadius, float influenceRadius, float surfaceGravity, int priority)
+            : this(id, center, surfaceRadius, influenceRadius, surfaceGravity, priority, false, Vector3.down) { }
+
+        public GravityFieldData(int id, Vector3 center, float surfaceRadius, float influenceRadius, float surfaceGravity, int priority, bool isUniform, Vector3 uniformDirection)
         {
             Id = id;
             Center = center;
@@ -23,6 +29,8 @@ namespace Redshift.Gameplay
             InfluenceRadius = influenceRadius;
             SurfaceGravity = surfaceGravity;
             Priority = priority;
+            IsUniform = isUniform;
+            UniformDirection = uniformDirection;
         }
 
         public bool Contains(Vector3 point, float radiusScale = 1f)
@@ -31,9 +39,12 @@ namespace Redshift.Gameplay
             return (point - Center).sqrMagnitude <= r * r;
         }
 
-        /// <summary>Accélération de gravité au point donné (constante dans le champ, direction vers le centre).</summary>
+        /// <summary>Accélération de gravité au point donné (constante dans le champ, direction vers le centre — ou fixe si uniforme).</summary>
         public Vector3 AccelerationAt(Vector3 point)
         {
+            if (IsUniform)
+                return UniformDirection * SurfaceGravity;
+
             Vector3 toCenter = Center - point;
             float sqr = toCenter.sqrMagnitude;
             if (sqr < 1e-6f)
