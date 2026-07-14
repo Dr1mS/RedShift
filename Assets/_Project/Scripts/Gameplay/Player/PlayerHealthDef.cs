@@ -7,5 +7,11 @@ namespace Redshift.Gameplay
     public class PlayerHealthDef : ScriptableObject
     {
         public float MaxHealth = 100f;
+
+        [Header("Spectateur (caméra drone, SPEC §4.11)")]
+        public float SpectatorSpeed = 8f;
+        [Tooltip("Multiplicateur de vitesse avec Sprint maintenu.")]
+        public float SpectatorFastMultiplier = 3f;
+        public float SpectatorLookSensitivity = 0.12f;
     }
 }

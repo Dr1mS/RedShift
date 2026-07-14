@@ -14,6 +14,12 @@ namespace Redshift.Gameplay
         [SerializeField] private PlayerHealthDef _def;
         [SerializeField] private PlayerMotor _motor;
         [SerializeField] private PlayerInventory _inventory;
+        [SerializeField, Tooltip("Caméra drone du propriétaire à la mort (SPEC §4.11).")]
+        private SpectatorController _spectator;
+        [SerializeField, Tooltip("Visée tête à couper à la mort (le spectateur gère la sienne).")]
+        private PlayerLook _look;
+        [SerializeField, Tooltip("Renderers assombris à la mort (cadavre visible par tous).")]
+        private Renderer[] _corpseRenderers;
 
         private readonly SyncVar<bool> _dead = new();
         private readonly SyncVar<float> _health = new();
@@ -59,8 +65,22 @@ namespace Redshift.Gameplay
             // Le host reçoit les deux passes : n'appliquer l'état qu'une fois.
             if (asServer && IsClientInitialized)
                 return;
-            if (next)
-                _motor.SetSeated(true, false); // gel v1 (caméra libre en P3-7)
+            if (!next)
+                return;
+
+            _motor.SetSeated(true, false); // gèle le corps (cadavre)
+
+            foreach (Renderer r in _corpseRenderers)
+                if (r != null)
+                    r.material.color = Color.Lerp(r.material.color, Color.black, 0.75f);
+
+            if (IsOwner)
+            {
+                if (_look != null)
+                    _look.enabled = false;
+                if (_spectator != null)
+                    _spectator.Begin();
+            }
         }
     }
 }

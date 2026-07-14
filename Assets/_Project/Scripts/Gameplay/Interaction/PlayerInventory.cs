@@ -19,8 +19,18 @@ namespace Redshift.Gameplay
         private readonly SyncVar<WorldItem> _handItem = new();
         private readonly SyncList<WorldItem> _slots = new();
 
+        private PlayerHealth health;
+
         public Transform HandAnchor => _handAnchor;
         public WorldItem HandItem => _handItem.Value;
+
+        private void Awake()
+        {
+            health = GetComponent<PlayerHealth>();
+        }
+
+        // Un mort ne manipule plus le loot — y compris les RPC encore en vol au moment du décès.
+        private bool ServerBlockedByDeath => health != null && health.IsDead;
 
         public WorldItem GetSlot(int index) => index >= 0 && index < _slots.Count ? _slots[index] : null;
 
@@ -56,7 +66,7 @@ namespace Redshift.Gameplay
         [ServerRpc]
         private void PickupServerRpc(WorldItem item)
         {
-            if (item == null || item.IsHeld || item.IsStored || _handItem.Value != null)
+            if (ServerBlockedByDeath || item == null || item.IsHeld || item.IsStored || _handItem.Value != null)
                 return;
             item.SetHolder(this);
             _handItem.Value = item;
@@ -76,7 +86,7 @@ namespace Redshift.Gameplay
         [ServerRpc]
         private void SlotSwapServerRpc(int slot)
         {
-            if (slot < 0 || slot >= SlotCount)
+            if (ServerBlockedByDeath || slot < 0 || slot >= SlotCount)
                 return;
 
             WorldItem hand = _handItem.Value;

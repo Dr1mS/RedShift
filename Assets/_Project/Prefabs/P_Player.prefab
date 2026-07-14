@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 2418088467728295414}
   - component: {fileID: 5723420698451992621}
   - component: {fileID: 8086619726576204671}
+  - component: {fileID: 3582539365787776274}
   m_Layer: 6
   m_Name: P_Player
   m_TagString: Untagged
@@ -338,6 +339,25 @@ MonoBehaviour:
   _def: {fileID: 11400000, guid: b5ab48631716d034c84a24b91a6c2e9b, type: 2}
   _motor: {fileID: 5354212606918495245}
   _inventory: {fileID: 69499401604852698}
+  _spectator: {fileID: 3582539365787776274}
+  _look: {fileID: 2494589733068596347}
+  _corpseRenderers:
+  - {fileID: 7300326499786462044}
+--- !u!114 &3582539365787776274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153268697181494497}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 140966f403fadcb478a2dcc47697f6b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Redshift.Gameplay::Redshift.Gameplay.SpectatorController
+  _def: {fileID: 11400000, guid: b5ab48631716d034c84a24b91a6c2e9b, type: 2}
+  _rig: {fileID: 5772076111547175172}
+  _inputAsset: {fileID: -944628639613478452, guid: e8ba4b98a0864814d8625c8e4ea7b9c2, type: 3}
 --- !u!1 &3448683931425097343
 GameObject:
   m_ObjectHideFlags: 0
