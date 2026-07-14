@@ -27,6 +27,8 @@ namespace Redshift.Gameplay
         private Rigidbody body;
         private CapsuleCollider capsule;
         private GravityReceiver gravity;
+        private PlayerInteractor interactor;
+        private PlayerLook look;
 
         private InputAction moveAction;
         private InputAction lookAction;
@@ -52,6 +54,8 @@ namespace Redshift.Gameplay
             body = GetComponent<Rigidbody>();
             capsule = GetComponent<CapsuleCollider>();
             gravity = GetComponent<GravityReceiver>();
+            interactor = GetComponent<PlayerInteractor>();
+            look = _head != null ? _head.GetComponent<PlayerLook>() : null;
 
             body.useGravity = false;
             body.freezeRotation = true;
@@ -89,6 +93,33 @@ namespace Redshift.Gameplay
             base.OnStopClient();
             if (IsOwner)
                 _inputAsset.FindActionMap("Player")?.Disable();
+        }
+
+        /// <summary>
+        /// Gèle/dégèle le controller quand le joueur s'assoit dans un siège (SPEC §4.3).
+        /// Appelé chez TOUS les pairs (collider coupé partout) ; le pilote perd aussi
+        /// le look tête (la souris pilote la navette).
+        /// </summary>
+        public void SetSeated(bool seated, bool asPilot)
+        {
+            capsule.enabled = !seated;
+
+            if (IsOwner)
+            {
+                body.isKinematic = seated;
+                if (!seated)
+                    body.linearVelocity = Vector3.zero;
+                if (interactor != null)
+                    interactor.enabled = !seated;
+                if (look != null)
+                {
+                    look.enabled = !seated || !asPilot;
+                    if (seated && asPilot)
+                        _head.localRotation = Quaternion.identity;
+                }
+            }
+
+            enabled = !seated && IsOwner;
         }
 
         private void BindInput()
