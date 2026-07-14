@@ -19,6 +19,10 @@ namespace Redshift.Gameplay
         [SerializeField] private SystemDef _def;
         [SerializeField, Tooltip("Index du système dans l'expédition (quota croissant, 0 = premier).")]
         private int _systemIndex;
+        [SerializeField, Tooltip("Prefab de l'onde de choc, spawné à l'éruption (T-0).")]
+        private NetworkObject _shockwavePrefab;
+        [SerializeField, Tooltip("Origine de l'onde : le visuel de l'étoile.")]
+        private Transform _starOrigin;
 
         private readonly SyncVar<GamePhase> _phase = new(GamePhase.Ftl);
         private readonly SyncVar<uint> _phaseStartTick = new();
@@ -111,8 +115,18 @@ namespace Redshift.Gameplay
             if (timeline.SupernovaErupted && !supernovaAnnounced)
             {
                 supernovaAnnounced = true;
+                SpawnShockwave();
                 SupernovaEruptedRpc();
             }
+        }
+
+        [Server]
+        private void SpawnShockwave()
+        {
+            if (_shockwavePrefab == null || _starOrigin == null)
+                return;
+            NetworkObject wave = Instantiate(_shockwavePrefab, _starOrigin.position, Quaternion.identity);
+            ServerManager.Spawn(wave);
         }
 
         /// <summary>Serveur : crédite la valeur d'un dépôt en soute (SPEC §4.6).</summary>

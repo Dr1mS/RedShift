@@ -42,6 +42,17 @@ namespace Redshift.Gameplay
         [Server]
         public void ServerClearHand() => _handItem.Value = null;
 
+        /// <summary>Serveur uniquement : lâche l'objet en main sur place (mort du joueur).</summary>
+        [Server]
+        public void ServerDropHand()
+        {
+            WorldItem item = _handItem.Value;
+            if (item == null)
+                return;
+            _handItem.Value = null;
+            item.Release(_handAnchor.position, _handAnchor.rotation, Vector3.zero);
+        }
+
         [ServerRpc]
         private void PickupServerRpc(WorldItem item)
         {

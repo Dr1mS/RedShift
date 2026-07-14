@@ -300,7 +300,7 @@ MonoBehaviour:
   <PrefabId>k__BackingField: 65535
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 0
-  SceneId: 4294704895
+  SceneId: 3754684149
   SerializedTransformProperties:
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
@@ -431,7 +431,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8036587036911807762, guid: 41658ec1354156c46baf98b8205d6781, type: 3}
       propertyPath: SceneId
-      value: 3758092015
+      value: 4292603623
       objectReference: {fileID: 0}
     - target: {fileID: 8036587036911807762, guid: 41658ec1354156c46baf98b8205d6781, type: 3}
       propertyPath: WasActiveDuringEdit
@@ -906,7 +906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8036587036911807762, guid: 41658ec1354156c46baf98b8205d6781, type: 3}
       propertyPath: SceneId
-      value: 3758079981
+      value: 4292607983
       objectReference: {fileID: 0}
     - target: {fileID: 8036587036911807762, guid: 41658ec1354156c46baf98b8205d6781, type: 3}
       propertyPath: WasActiveDuringEdit
@@ -1208,7 +1208,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8036587036911807762, guid: 41658ec1354156c46baf98b8205d6781, type: 3}
       propertyPath: SceneId
-      value: 4291805119
+      value: 4291542967
       objectReference: {fileID: 0}
     - target: {fileID: 8036587036911807762, guid: 41658ec1354156c46baf98b8205d6781, type: 3}
       propertyPath: WasActiveDuringEdit
@@ -1390,7 +1390,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3999967194597702545, guid: 163576835137bc34394b2149a9625500, type: 3}
       propertyPath: SceneId
-      value: 4292603837
+      value: 3758079983
       objectReference: {fileID: 0}
     - target: {fileID: 3999967194597702545, guid: 163576835137bc34394b2149a9625500, type: 3}
       propertyPath: WasActiveDuringEdit
@@ -1800,7 +1800,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5373419856688427944, guid: ecc677ac2d2c58f4584c008caf53fb25, type: 3}
       propertyPath: SceneId
-      value: 3755736743
+      value: 4293652159
       objectReference: {fileID: 0}
     - target: {fileID: 5373419856688427944, guid: ecc677ac2d2c58f4584c008caf53fb25, type: 3}
       propertyPath: WasActiveDuringEdit
@@ -1865,7 +1865,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3999967194597702545, guid: 163576835137bc34394b2149a9625500, type: 3}
       propertyPath: SceneId
-      value: 3754946487
+      value: 4292870117
       objectReference: {fileID: 0}
     - target: {fileID: 3999967194597702545, guid: 163576835137bc34394b2149a9625500, type: 3}
       propertyPath: WasActiveDuringEdit
@@ -1920,6 +1920,53 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 163576835137bc34394b2149a9625500, type: 3}
+--- !u!1 &1673616303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1673616305}
+  - component: {fileID: 1673616304}
+  m_Layer: 0
+  m_Name: StarDirector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1673616304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673616303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9df96d7a97743ef4b9f6e4090aca77b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Redshift.Gameplay::Redshift.Gameplay.StarDirector
+  _def: {fileID: 11400000, guid: 4aff9ddd7a14d034d84a80048969cef9, type: 2}
+  _starRenderer: {fileID: 1864140729}
+  _systemLight: {fileID: 2024509709}
+--- !u!4 &1673616305
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673616303}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1681484819
 GameObject:
   m_ObjectHideFlags: 0
@@ -1964,7 +2011,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3999967194597702545, guid: 163576835137bc34394b2149a9625500, type: 3}
       propertyPath: SceneId
-      value: 3757813487
+      value: 3757027311
       objectReference: {fileID: 0}
     - target: {fileID: 3999967194597702545, guid: 163576835137bc34394b2149a9625500, type: 3}
       propertyPath: WasActiveDuringEdit
@@ -2307,6 +2354,8 @@ MonoBehaviour:
   _networkObjectCache: {fileID: 0}
   _def: {fileID: 11400000, guid: 06b4511c961ddc04bacbdc28d2143687, type: 2}
   _systemIndex: 0
+  _shockwavePrefab: {fileID: 470474420145471133, guid: 60a562362d716a649b0167b9b311d63e, type: 3}
+  _starOrigin: {fileID: 1864140731}
 --- !u!114 &2045813457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2340,7 +2389,7 @@ MonoBehaviour:
   <PrefabId>k__BackingField: 65535
   <SpawnableCollectionId>k__BackingField: 0
   <AssetPathHash>k__BackingField: 0
-  SceneId: 3758079735
+  SceneId: 3754929909
   SerializedTransformProperties:
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 0}
@@ -2399,3 +2448,4 @@ SceneRoots:
   - {fileID: 1643515096}
   - {fileID: 1350309433}
   - {fileID: 1711524135}
+  - {fileID: 1673616305}

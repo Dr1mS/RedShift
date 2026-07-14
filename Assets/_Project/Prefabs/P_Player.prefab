@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 5581639161380942201}
   - component: {fileID: 2418088467728295414}
   - component: {fileID: 5723420698451992621}
+  - component: {fileID: 8086619726576204671}
   m_Layer: 6
   m_Name: P_Player
   m_TagString: Untagged
@@ -319,6 +320,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967231
   _inputAsset: {fileID: -944628639613478452, guid: e8ba4b98a0864814d8625c8e4ea7b9c2, type: 3}
+--- !u!114 &8086619726576204671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153268697181494497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ead94ecf300f1044ae871ac41225c03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Redshift.Gameplay::Redshift.Gameplay.PlayerHealth
+  _componentIndexCache: 255
+  _addedNetworkObject: {fileID: 5558377576585741582}
+  _networkObjectCache: {fileID: 0}
+  _motor: {fileID: 5354212606918495245}
+  _inventory: {fileID: 69499401604852698}
 --- !u!1 &3448683931425097343
 GameObject:
   m_ObjectHideFlags: 0
