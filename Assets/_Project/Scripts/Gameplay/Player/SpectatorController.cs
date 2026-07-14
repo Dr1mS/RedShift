@@ -64,12 +64,5 @@ namespace Redshift.Gameplay
             Vector3 velocity = _rig.forward * move.y + _rig.right * move.x + anchoredUp * vertical;
             _rig.position += velocity * (speed * Time.deltaTime);
         }
-
-        // TEMP P3 : bandeau minimal en IMGUI, remplacé par le HUD (P3-8).
-        private void OnGUI()
-        {
-            GUI.Label(new Rect(Screen.width / 2f - 200f, 30f, 400f, 30f),
-                "MORT — caméra libre (ZQSD/WASD, Espace/Ctrl, Shift = rapide)");
-        }
     }
 }
