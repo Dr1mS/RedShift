@@ -3,7 +3,9 @@
     "rootNamespace": "Redshift.UI",
     "references": [
         "Redshift.Core",
-        "Redshift.Meta"
+        "Redshift.Meta",
+        "Redshift.Gameplay",
+        "FishNet.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

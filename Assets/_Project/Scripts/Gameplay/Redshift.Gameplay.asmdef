@@ -3,6 +3,7 @@
     "rootNamespace": "Redshift.Gameplay",
     "references": [
         "Redshift.Core",
+        "Redshift.Meta",
         "FishNet.Runtime",
         "UniTask",
         "Unity.InputSystem",

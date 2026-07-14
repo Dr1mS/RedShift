@@ -19,9 +19,10 @@ namespace Redshift.Gameplay
         private InputAction dropAction;
         private readonly InputAction[] slotActions = new InputAction[PlayerInventory.SlotCount];
 
-        private IInteractable current;
-
         public PlayerInventory Inventory => _inventory;
+
+        /// <summary>Cible visée ce frame (affichée par le HUD) ; null hors playmode/portée.</summary>
+        public IInteractable CurrentTarget { get; private set; }
 
         private void OnEnable()
         {
@@ -34,10 +35,10 @@ namespace Redshift.Gameplay
 
         private void Update()
         {
-            current = FindTarget();
+            CurrentTarget = FindTarget();
 
-            if (interactAction.WasPressedThisFrame() && current != null && current.CanInteract(this))
-                current.Interact(this);
+            if (interactAction.WasPressedThisFrame() && CurrentTarget != null && CurrentTarget.CanInteract(this))
+                CurrentTarget.Interact(this);
 
             if (dropAction.WasPressedThisFrame() && _inventory.HandItem != null)
                 _inventory.RequestDrop();
@@ -56,13 +57,6 @@ namespace Redshift.Gameplay
             return hit.collider.GetComponentInParent<IInteractable>();
         }
 
-        // TEMP P1 : prompt minimal en IMGUI, remplacé par le HUD en P3.
-        private void OnGUI()
-        {
-            if (current != null && current.CanInteract(this))
-                GUI.Label(new Rect(Screen.width / 2f - 150f, Screen.height * 0.6f, 300f, 30f), $"[E] {current.Prompt}");
-            if (_inventory.HandItem != null)
-                GUI.Label(new Rect(Screen.width / 2f - 150f, Screen.height - 40f, 300f, 30f), $"Main : {_inventory.HandItem.Def.DisplayName}  [G] lâcher  [1-4] ranger");
-        }
+        private void OnDisable() => CurrentTarget = null;
     }
 }

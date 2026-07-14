@@ -28,6 +28,9 @@ namespace Redshift.Gameplay
         [SerializeField, Tooltip("Priorité de champ : le plus haut gagne (lune > planète, poche > tout).")]
         private int _priority = 0;
 
+        [SerializeField, Tooltip("Champ uniforme (poches d'intérieur, D6) : gravité constante selon le -up de l'objet.")]
+        private bool _uniform;
+
         private int id;
 
         public int Id => id;
@@ -47,7 +50,7 @@ namespace Redshift.Gameplay
                     for (int i = 0; i < sources.Count; i++)
                     {
                         GravitySource s = sources[i];
-                        fieldCache.Add(new GravityFieldData(s.id, s.transform.position, s._surfaceRadius, s._influenceRadius, s._surfaceGravity, s._priority));
+                        fieldCache.Add(new GravityFieldData(s.id, s.transform.position, s._surfaceRadius, s._influenceRadius, s._surfaceGravity, s._priority, s._uniform, -s.transform.up));
                     }
                     cacheDirty = false;
                 }
@@ -59,12 +62,13 @@ namespace Redshift.Gameplay
         public static void InvalidateCache() => cacheDirty = true;
 
         /// <summary>Configuration par code (outillage de scène et tests). En scène, passer par l'inspecteur.</summary>
-        public void Configure(float surfaceRadius, float influenceRadius, float surfaceGravity, int priority)
+        public void Configure(float surfaceRadius, float influenceRadius, float surfaceGravity, int priority, bool uniform = false)
         {
             _surfaceRadius = surfaceRadius;
             _influenceRadius = influenceRadius;
             _surfaceGravity = surfaceGravity;
             _priority = priority;
+            _uniform = uniform;
             cacheDirty = true;
         }
 
