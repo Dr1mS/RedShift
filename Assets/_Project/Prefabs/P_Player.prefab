@@ -335,6 +335,7 @@ MonoBehaviour:
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 5558377576585741582}
   _networkObjectCache: {fileID: 0}
+  _def: {fileID: 11400000, guid: b5ab48631716d034c84a24b91a6c2e9b, type: 2}
   _motor: {fileID: 5354212606918495245}
   _inventory: {fileID: 69499401604852698}
 --- !u!1 &3448683931425097343
