@@ -81,11 +81,29 @@ namespace Redshift.Gameplay
         }
 
         private float PhaseElapsed
-            => (float)((TimeManager.Tick - _phaseStartTick.Value) * TimeManager.TickDelta);
+        {
+            get
+            {
+                // Le client peut traîner de quelques ticks derrière l'estampille serveur — soustraction unsigned.
+                uint now = TimeManager.Tick;
+                uint start = _phaseStartTick.Value;
+                return now <= start ? 0f : (float)((now - start) * TimeManager.TickDelta);
+            }
+        }
 
         /// <summary>Temps (s) écoulé depuis l'arrivée dans le système (écran récap).</summary>
         public float ElapsedSystemTime
-            => _phase.Value == GamePhase.Ftl ? 0f : (float)((TimeManager.Tick - _systemStartTick.Value) * TimeManager.TickDelta);
+        {
+            get
+            {
+                if (_phase.Value == GamePhase.Ftl)
+                    return 0f;
+                // Le client peut traîner de quelques ticks derrière l'estampille serveur — soustraction unsigned.
+                uint now = TimeManager.Tick;
+                uint start = _systemStartTick.Value;
+                return now <= start ? 0f : (float)((now - start) * TimeManager.TickDelta);
+            }
+        }
 
         private void Awake()
         {

@@ -24,7 +24,17 @@ namespace Redshift.Gameplay
         public float Radius => ShockwaveModel.RadiusAt(ElapsedSeconds, _def.ShockwaveSpeed, _def.ShockwaveStartRadius);
 
         private float ElapsedSeconds
-            => _startTick.Value == 0 ? 0f : (float)((TimeManager.Tick - _startTick.Value) * TimeManager.TickDelta);
+        {
+            get
+            {
+                uint start = _startTick.Value;
+                if (start == 0)
+                    return 0f;
+                // Le client peut traîner de quelques ticks derrière l'estampille serveur — soustraction unsigned.
+                uint now = TimeManager.Tick;
+                return now <= start ? 0f : (float)((now - start) * TimeManager.TickDelta);
+            }
+        }
 
         public override void OnStartServer()
         {
