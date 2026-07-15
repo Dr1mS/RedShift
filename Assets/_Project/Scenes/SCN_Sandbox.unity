@@ -9749,6 +9749,7 @@ MonoBehaviour:
   _heatGroup: {fileID: 1107285237}
   _heatFill: {fileID: 1782175029}
   _deathBanner: {fileID: 1027190945}
+  _deathBannerText: {fileID: 1027190946}
 --- !u!114 &1852491228
 MonoBehaviour:
   m_ObjectHideFlags: 0

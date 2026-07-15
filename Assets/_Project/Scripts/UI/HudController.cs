@@ -22,6 +22,8 @@ namespace Redshift.UI
         [SerializeField] private GameObject _heatGroup;
         [SerializeField] private Image _heatFill;
         [SerializeField] private GameObject _deathBanner;
+        [SerializeField, Tooltip("Texte du bandeau de mort — mis à jour selon le mode spectateur (libre / suivi).")]
+        private Text _deathBannerText;
 
         private static readonly Color PhaseCalm = Color.white;
         private static readonly Color PhaseCritical = new(1f, 0.55f, 0.2f);
@@ -34,6 +36,7 @@ namespace Redshift.UI
         private PlayerInventory inventory;
         private PlayerInteractor interactor;
         private MiningLaser laser;
+        private SpectatorController spectator;
         private float bindTimer;
         private readonly System.Text.StringBuilder slotsBuilder = new();
 
@@ -99,6 +102,7 @@ namespace Redshift.UI
                 health = candidate.GetComponent<PlayerHealth>();
                 inventory = candidate.GetComponent<PlayerInventory>();
                 laser = candidate.GetComponent<MiningLaser>();
+                spectator = candidate.GetComponent<SpectatorController>();
                 interactor = candidate.GetComponentInChildren<PlayerInteractor>(true);
                 return true;
             }
@@ -110,6 +114,8 @@ namespace Redshift.UI
             bool dead = health != null && health.IsDead;
             if (_deathBanner.activeSelf != dead)
                 _deathBanner.SetActive(dead);
+            if (dead && _deathBannerText != null)
+                _deathBannerText.text = SpectatorBannerText();
 
             float hp = health != null ? health.HealthNormalized : 1f;
             _healthFill.fillAmount = hp;
@@ -146,6 +152,14 @@ namespace Redshift.UI
                     slotsBuilder.Append("      ");
             }
             _slotsText.text = slotsBuilder.ToString();
+        }
+
+        /// <summary>Bandeau de mort selon le mode spectateur (SPEC §4.11) — style greybox.</summary>
+        private string SpectatorBannerText()
+        {
+            if (spectator != null && spectator.CurrentMode == SpectatorController.Mode.Follow)
+                return $"SPECTATEUR — Joueur {spectator.FollowedClientId}   [Tab/V] changer   [C] caméra libre";
+            return "MORT — caméra libre (ZQSD/WASD, Espace/Ctrl, Shift = rapide)   [Tab] suivre un coéquipier";
         }
     }
 }
