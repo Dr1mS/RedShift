@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FishNet;
 using FishNet.Managing;
 using Redshift.Gameplay;
+using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Vivox;
 using UnityEngine;
@@ -207,36 +208,15 @@ namespace Redshift.Voice
         // ---- Auth UGS -------------------------------------------------------------------
 
         /// <summary>
-        /// Connexion anonyme UGS si nécessaire. Utilise la réflexion sur AuthenticationService pour
-        /// ne pas dépendre en dur du package d'authentification (dépendance tirée transitivement par
-        /// Vivox le jour où le projet est lié) : si le service n'est pas présent, on laisse Vivox
-        /// tenter son propre flux — dans les deux cas, sans projet lié on n'arrive jamais ici.
+        /// Connexion anonyme UGS si nécessaire : Vivox exige un joueur UGS authentifié pour générer
+        /// son token d'accès (tokenKey volontairement absent du client — flux UGS). Le package
+        /// com.unity.services.authentication est une dépendance validée du projet (2026-07-15).
         /// </summary>
         private static async Task EnsureSignedInAsync()
         {
-            Type authType = Type.GetType(
-                "Unity.Services.Authentication.AuthenticationService, Unity.Services.Authentication");
-            if (authType == null)
-                return; // Package d'auth absent : Vivox gérera son token via UGS core.
-
-            object instance = authType.GetProperty("Instance")?.GetValue(null);
-            if (instance == null)
+            if (AuthenticationService.Instance.IsSignedIn)
                 return;
-
-            var isSignedIn = (bool)(authType.GetProperty("IsSignedIn")?.GetValue(instance) ?? false);
-            if (isSignedIn)
-                return;
-
-            var signIn = authType.GetMethod("SignInAnonymouslyAsync", new[] { typeof(bool) })
-                         ?? authType.GetMethod("SignInAnonymouslyAsync", Type.EmptyTypes);
-            if (signIn == null)
-                return;
-
-            object task = signIn.GetParameters().Length == 1
-                ? signIn.Invoke(instance, new object[] { true })
-                : signIn.Invoke(instance, null);
-            if (task is Task t)
-                await t;
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
 
         // ---- Connexion réseau -----------------------------------------------------------
@@ -384,11 +364,19 @@ namespace Redshift.Voice
             switch (channel)
             {
                 case VoiceRouting.Channel.Positional:
+                    // L'enum Vivox AudioFadeModel commence à 1 (InverseByDistance=1) : mapping
+                    // explicite depuis la convention 0/1/2 du SO, jamais de cast direct.
+                    AudioFadeModel fadeModel = (_def != null ? Mathf.Clamp(_def.AudioFadeModel, 0, 2) : 0) switch
+                    {
+                        1 => AudioFadeModel.LinearByDistance,
+                        2 => AudioFadeModel.ExponentialByDistance,
+                        _ => AudioFadeModel.InverseByDistance,
+                    };
                     var props = new Channel3DProperties(
                         _def != null ? Mathf.Max(1, _def.AudibleDistanceMeters) : 20,
                         _def != null ? Mathf.Clamp(_def.ConversationalDistanceMeters, 0, Mathf.Max(1, _def.AudibleDistanceMeters)) : 1,
                         _def != null ? Mathf.Max(0f, _def.AudioFadeIntensity) : 1f,
-                        (AudioFadeModel)(_def != null ? Mathf.Clamp(_def.AudioFadeModel, 0, 2) : 0));
+                        fadeModel);
                     await VivoxService.Instance.JoinPositionalChannelAsync(_positionalChannel, ChatCapability.AudioOnly, props);
                     break;
                 case VoiceRouting.Channel.Dead:
