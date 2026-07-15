@@ -1,5 +1,6 @@
 using Redshift.Core;
 using Redshift.Gameplay;
+using Redshift.Voice;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,8 @@ namespace Redshift.UI
         [SerializeField] private GameObject _deathBanner;
         [SerializeField, Tooltip("Texte du bandeau de mort — mis à jour selon le mode spectateur (libre / suivi).")]
         private Text _deathBannerText;
+        [SerializeField, Tooltip("Indicateur d'état voice (greybox, discret) — OFF si projet Cloud non lié (P4-13).")]
+        private Text _voiceText;
 
         private static readonly Color PhaseCalm = Color.white;
         private static readonly Color PhaseCritical = new(1f, 0.55f, 0.2f);
@@ -40,11 +43,37 @@ namespace Redshift.UI
         private float bindTimer;
         private readonly System.Text.StringBuilder slotsBuilder = new();
 
+        private VoiceService voice;
+
         private void Update()
         {
             UpdateDirectorPanel();
+            UpdateVoicePanel();
             if (TryBindLocalPlayer())
                 UpdatePlayerPanel();
+        }
+
+        /// <summary>Indicateur d'état voice greybox (P4-13) — OFF tant que le projet Cloud n'est pas lié.</summary>
+        private void UpdateVoicePanel()
+        {
+            if (_voiceText == null)
+                return;
+            if (voice == null)
+                voice = FindAnyObjectByType<VoiceService>();
+            if (voice == null)
+            {
+                _voiceText.text = string.Empty;
+                return;
+            }
+            _voiceText.text = voice.State switch
+            {
+                VoiceService.VoiceState.Unavailable => "VOICE : OFF (projet non lié)",
+                VoiceService.VoiceState.Failed => "VOICE : OFF (échec)",
+                VoiceService.VoiceState.Initializing => "VOICE : …",
+                _ when voice.InDeadChannel => "VOICE : MORTS",
+                VoiceService.VoiceState.InPositionalChannel => "VOICE : ON",
+                _ => "VOICE : connexion…",
+            };
         }
 
         private void UpdateDirectorPanel()

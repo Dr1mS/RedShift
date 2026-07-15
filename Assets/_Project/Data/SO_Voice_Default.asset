@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b7970471c454b740b3e182ae3d347d6, type: 3}
+  m_Name: SO_Voice_Default
+  m_EditorClassIdentifier: Redshift.Voice::Redshift.Voice.VoiceDef
+  AudibleDistanceMeters: 20
+  ConversationalDistanceMeters: 1
+  AudioFadeIntensity: 1
+  AudioFadeModel: 0
+  PositionalChannelPrefix: redshift-prox
+  DeadChannelPrefix: redshift-dead
+  RadioChannelPrefix: redshift-radio

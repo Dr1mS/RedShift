@@ -1,13 +1,13 @@
 {
-    "name": "Redshift.UI",
-    "rootNamespace": "Redshift.UI",
+    "name": "Redshift.Voice",
+    "rootNamespace": "Redshift.Voice",
     "references": [
         "Redshift.Core",
-        "Redshift.Meta",
         "Redshift.Gameplay",
-        "Redshift.Networking",
-        "Redshift.Voice",
-        "FishNet.Runtime"
+        "FishNet.Runtime",
+        "UniTask",
+        "Unity.Services.Core",
+        "Unity.Services.Vivox"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
